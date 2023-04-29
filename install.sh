@@ -13,7 +13,7 @@ cur_dir=$(pwd)
 # check os
 release="archlinux"
 
-arch=$(arch)
+arch=$(uname -m)
 
 if [[ $arch == "x86_64" || $arch == "x64" || $arch == "amd64" ]]; then
     arch="amd64"
@@ -138,5 +138,5 @@ install_x-ui() {
 }
 
 echo -e "${green}开始安装${plain}"
-install_base
+#install_base
 install_x-ui $1
