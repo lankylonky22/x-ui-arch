@@ -27,7 +27,7 @@ os_version=""
 
 # os version
 if [[ -f /etc/os-release ]]; then
-    os_version=$(awk -F'[= ."]' '/VERSION_ID/{print $3}' /etc/os-release)
+    os_version=$(awk -F'[= ."]' '/BUILD_ID/{print $2}' /etc/os-release)
 fi
 
 confirm() {
