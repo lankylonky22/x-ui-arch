@@ -4,7 +4,9 @@ on:
     tags:
       - 0.*
   workflow_dispatch:
-
+permissions:
+  contents: 'read'
+  id-token: 'write'
 jobs:
   release:
     runs-on: ubuntu-latest
