@@ -38,7 +38,7 @@ os_version=""
 # os version
 if [[ -f /etc/os-release ]]; then
     os_version=$(awk -F'[= ."]' '/BUILD_ID/{print $2}' /etc/os-release)
-
+fi
 
 install_base() {
     if [[ x"${release}" == x"centos" ]]; then
