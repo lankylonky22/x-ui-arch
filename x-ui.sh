@@ -382,7 +382,7 @@ ssl_cert_issue() {
     LOGI "1.知晓Cloudflare 注册邮箱"
     LOGI "2.知晓Cloudflare Global API Key"
     LOGI "3.域名已通过Cloudflare进行解析到当前服务器"
-    LOGI "4.该脚本申请证书默认安装路径为/root/cert目录"
+    LOGI "4.该脚本申请证书默认安装路径为/root/cert1目录"
     confirm "我已确认以上内容[y/n]" "y"
     if [ $? -eq 0 ]; then
         cd ~
@@ -395,7 +395,10 @@ ssl_cert_issue() {
         CF_Domain=""
         CF_GlobalKey=""
         CF_AccountEmail=""
-        certPath=/root/cert
+        certPath=""
+        LOGD "请设置certPath:"
+        read -p "Input your certPath here(absolute path):" certPath
+        
         if [ ! -d "$certPath" ]; then
             mkdir $certPath
         else
@@ -425,9 +428,9 @@ ssl_cert_issue() {
         else
             LOGI "证书签发成功,安装中..."
         fi
-        ~/.acme.sh/acme.sh --installcert -d ${CF_Domain} -d *.${CF_Domain} --ca-file /root/cert/ca.cer \
-        --cert-file /root/cert/${CF_Domain}.cer --key-file /root/cert/${CF_Domain}.key \
-        --fullchain-file /root/cert/fullchain.cer
+        ~/.acme.sh/acme.sh --installcert -d ${CF_Domain} -d *.${CF_Domain} --ca-file ${certPath}/ca.cer \
+        --cert-file ${certPath}/${CF_Domain}.cer --key-file ${certPath}/${CF_Domain}.key \
+        --fullchain-file ${certPath}/fullchain.cer
         if [ $? -ne 0 ]; then
             LOGE "证书安装失败,脚本退出"
             exit 1
@@ -437,12 +440,12 @@ ssl_cert_issue() {
         ~/.acme.sh/acme.sh --upgrade --auto-upgrade
         if [ $? -ne 0 ]; then
             LOGE "自动更新设置失败,脚本退出"
-            ls -lah cert
+            ls -lah ${certPath}
             chmod 755 $certPath
             exit 1
         else
             LOGI "证书已安装且已开启自动更新,具体信息如下"
-            ls -lah cert
+            ls -lah ${certPath}
             chmod 755 $certPath
         fi
     else
